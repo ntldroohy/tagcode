@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/plugins/switchery/switchery.css" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="lib/plupload/plupload.full.min.js"></script>
+    <script type="text/javascript" src="lib/plupload/i18n/zh_CN.js"></script>
+    <script src="lib/textarea-aotu/autosize.js"></script>
+    <script type="text/javascript" src="js/plugins/switchery/switchery.js"></script>
+    <script src="js/plugins/serializeJson/formjson.js"></script>
+    <title>企业信息修改</title>
+    <style>
+        .wrapper-content {
+            padding: 20px 20px 0px 20px;
+        }
+        .accordion-group{
+            margin-bottom: 2px;
+            border: 1px solid #e5e5e5;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        .accordion-heading{
+            cursor: pointer;
+        }
+        .btn {
+            font-size: small;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <form class="form-horizontal" id="editForm" method="post">
+                <input type="hidden" name="id" id="id" value="$!jyxx.id"">
+                <input type="hidden" name="zt" id="zt" value="$!jyxx.zt">
+                <input type="hidden" name="qyzcid" value="$!bean.id">
+                <input type="hidden" name="tjs" id="tjs">
+                <input type="hidden" name="deltjids" id="deltjids">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">企业介绍</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control editarea" name="qyjs" rows="5" maxlength="1000">$!jyxx.qyjs</textarea>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"><span style="color:red"></span>营业时间</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="yysj" name="yysj" value="$!{jyxx.yysj}">
+                    </div>
+                    <label class="col-sm-2 control-label"><span style="color:red"></span>营业电话</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="yydh" name="yydh" value="$!{jyxx.yydh}">
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否提供wifi</label>
+                    <div class="col-sm-4">
+                        <input type="hidden" name="wifi"#if($!jyxx.wifi==0)value="0"#else value="1" #end >
+                        <input  type="checkbox" class="js-switch" id="wifi"#if($!jyxx.wifi!=0)checked #else unchecked #end>
+                    </div>
+                    <label class="col-sm-2 control-label">是否外卖</label>
+                    <div class="col-sm-4">
+                        <input type="hidden" name="sfwm" value="1">
+                        <input  type="checkbox" class="js-switch" id="sfwm" #if($!jyxx.sfwm!=0)checked #else unchecked #end >
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否有停车位</label>
+                    <div class="col-sm-10">
+                        <input type="hidden" name="tcwxx" value="1">
+                        <input  type="checkbox" class="js-switch" id="tcwxx" #if($!jyxx.tcwxx!=0)checked #else unchecked #end >
+##                        <textarea class="form-control editarea" name="tcwxx" rows="5" maxlength="1000">$!jyxx.tcwxx</textarea>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">折扣活动</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control editarea" name="zkhd" rows="5" maxlength="1000">$!jyxx.zkhd</textarea>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <div class="accordion" id="accordion">
+                    #if($!tjs)
+                        #foreach($obj in $!tjs)
+                            <div class="accordion-group" onclick="toggleIn(this)">
+                                <div class="accordion-heading">
+                                    <button class="btn  btn-danger " type="button" onclick="delMxx(this,event);return false" title="删除"><i class="fa fa-trash-o"></i>删除</button>
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="javascript:void(0)">
+                                        &#12288;&#12288;<span class="xmm">#if($!obj.bt)$!obj.bt#else 未命名图片 #end</span>
+                                    </a>
+                                </div>
+                                <div  class="accordion-body collapse #if("$velocityCount"=="$!tjs.size()")in #end" >
+                                    <div class="accordion-inner">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <form class="form-horizontal dpxm">
+                                                    <input type="hidden" name="id" class="gzmxid" value="$!obj.id">
+                                                    <input type="hidden" name="fjid" class="fjid" value="$!obj.fjid">
+                                                    <input type="hidden" name="qyzcid" value="$!bean.id">
+                                                    <div class="form-group">
+                                                        <div class="col-sm-2">
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" placeholder="图片标题" class="form-control dpxmc noclick"  name="bt" value="$!obj.bt">
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <input type="text" placeholder="价格" class="form-control  noclick"  name="jg" value="$!obj.jg">
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <select id="lx" class="form-control noclick" name="lx">
+                                                                <option value="0"#if($!obj.lx=="0")selected#end >环境</option>
+                                                                <option value="1" #if($!obj.lx=="1")selected#end>菜品</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-2"><img onclick="picPreviewattachIds(this)" style="width: 200px;height: auto;cursor: pointer" src="/sysattach/download?appid=sysattach&id=$!obj.fjid"></div>
+                                                        <div class="col-sm-10">
+                                                            <textarea class="form-control editarea noclick" name="ms"placeholder="描述一下图片" rows="5" maxlength="1000">$!obj.ms</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        #end
+                    #else
+                        <div class="accordion-group" onclick="toggleIn(this)" style="display: none">
+                            <div class="accordion-heading">
+                                <button class="btn  btn-danger " type="button" onclick="delMxx(this,event);return false" title="删除"><i class="fa fa-trash-o"></i>删除</button>
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="javascript:void(0)">
+                                    &#12288;&#12288;<span class="xmm">未命名图片</span>
+                                </a>
+                            </div>
+                            <div  class="accordion-body collapse in" >
+                                <div class="accordion-inner">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <form class="form-horizontal dpxm">
+                                                <input type="hidden" name="id" class="gzmxid" value="$!obj.id">
+                                                <input type="hidden" name="fjid" class="fjid">
+                                                <input type="hidden" name="qyzcid" value="$!bean.id">
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 ">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text"  placeholder="图片标题" class="form-control dpxmc noclick"  name="bt" value="">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <input type="text" placeholder="价格" class="form-control  noclick"  name="jg" value="$!obj.jg">
+                                                    </div>
+                                                    <div class="col-sm-2 ">
+                                                        <select id="lx" class="form-control noclick" name="lx">
+                                                            <option value="0" selected >环境</option>
+                                                            <option value="1">菜品</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="hr-line-dashed"></div>
+                                                <div class="form-group">
+                                                    <div class="col-sm-2"><img onclick="picPreviewattachIds(this)"style="width: 200px;height: auto;cursor: pointer" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523953485777&di=221b583b846161772c405974ce8db6ce&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20170825%2F3f313cd6dea0426f919c12da119085bc.jpeg"></div>
+                                                    <div class="col-sm-10">
+                                                        <textarea class="form-control editarea noclick" placeholder="描述一下图片" name="ms" rows="5" maxlength="1000"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="hr-line-dashed"></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    #end
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12" style="text-align: center;cursor: pointer" id="tjupload">
+                    <a class="btn btn-white btn-sm" style="font-size: 12px; position: relative; z-index: 1;"  href="javascript:;"  id="tjupload_btn" >
+                        <i class="fa fa-upload"></i> 添加图片</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="edit-btn-area animated fadeInRight">
+    <a class="operate-btn" onclick="saveRole()"><i class="fa fa-save"></i>保存</a>
+    <a class="operate-btn" onclick="back()"><i class="fa fa-mail-reply"></i>返回</a>
+    <a class="operate-btn close-btn" title="收起按钮条"><i class="fa fa-angle-double-right"></i></a>
+</div>
+<div class="btn-area-open animated fadeInRight">
+    <a class="operate-btn open-btn" title="展开按钮条"><i class="fa fa-angle-double-left"></i></a>
+</div>
+</body>
+
+</html>
+#@script()
+<script type="text/javascript">
+    var deltjids="";//存储删除的图集
+    $(function () {
+        $(".js-switch").each(function () {
+            var switchery=new Switchery(this);
+        })
+        $(".js-switch").on('change',function () {
+            $(this).prev().val(this.checked?1:0);
+        })
+        autosize($(".editarea"));
+        $(document).on('keyup','.dpxmc',function (e) {
+            $(this).parents(".accordion-body").prev().find(".xmm").text($(this).val());
+        })
+        $(function () {
+            $('.accordion-group').on('mouseover',function (e) {
+                toggleIn(this)
+            })
+        })
+        $(".noclick").on('click',function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            return false;
+        })
+
+        initUpload("tjupload");
+    })
+
+
+
+
+    function addMxx(file,imageid) {
+        var obj= $(".accordion>.accordion-group").last().clone(true);
+        obj.find(".gzmxid").val("");//克隆并移除id
+        obj.find(".noclick").val("");//清空内容
+        obj.find(".fjid").val(imageid);
+        obj.find("[name='bt']").val(file.name);
+        obj.find(".xmm").text(file.name);//设置默认标题
+        obj.find("img").attr("src","/sysattach/download?appid=sysattach&id="+imageid)
+        obj.show();
+        obj.appendTo(".accordion");
+        toggleIn($(".accordion>.accordion-group").last());
+        autosize($(".editarea"));
+        $(".noclick").on('click',function (e) {//阻止编辑区域的点击事件冒泡
+            e.stopPropagation();
+            e.preventDefault();
+            return false;
+        })
+        return obj;
+    }
+
+    function delMxx(obj,e) {
+        e.stopPropagation();
+        e.cancelbubble=true;
+        if($(".accordion>.accordion-group").size()>1){
+            swal(
+                    {
+                        title: "确认删除该图片吗",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        closeOnConfirm: true,
+                        closeOnCancel: true
+                    },function (r) {
+                        if(r){
+                            var id =$(obj).parents(".accordion-group").find(".gzmxid").val();
+                            if(!!id){
+                                deltjids.length>0?deltjids+=","+id:deltjids+=id;
+                            }
+                            $(obj).parents(".accordion-group").remove();
+                            if($(".accordion-group").find(".in").size()<1){
+                                toggleIn($(".accordion>.accordion-group").last());
+                            }
+
+                        }
+
+                    }
+            )
+        }else{
+            top.CC.warningMsg("&#12288;&#12288;&#12288;至少保留一项")
+        }
+
+    }
+
+
+
+
+    function toggleIn(obj) {
+        $(obj).find(".accordion-body").addClass("in");
+        $(obj).siblings().find(".accordion-body").removeClass("in")
+    }
+
+
+
+
+
+
+    function beforeSave() {
+        // var blankObj
+        // $(".dpxmc").each(function () {
+        //     if(!$(this).val()){
+        //         toggleIn($(this).parents(".accordion-group"));
+        //         blankObj=$(this);
+        //         return false;
+        //     }
+        // })
+        var xmdata= $(".dpxm").map(function () {
+            return  $(this).serializeJSON();
+        })
+        $("#tjs").val(JSON.stringify(xmdata.toArray()))//图集对象
+        $("#deltjids").val(deltjids)//删除的图集对象
+        // return blankObj;
+    }
+
+
+
+    function saveRole() {
+        beforeSave()
+        // var blankObj=beforeSave();
+        // if(!!blankObj){
+        //     top.CC.warningMsg("图片标题不能为空")
+        //     blankObj.focus();
+        //     return
+        // }
+        save();
+    }
+
+    function save() {
+        if ($("#editForm").valid()) {
+            var loadingIndex = layer.load(2, {shade: [0.1]}); // 加载start
+            $.post("$link.getContextURL()/wdxx/qyxx/jyxxsave.json", $("#editForm").serialize(), function (data) {
+                layer.close(loadingIndex); // 加载end
+                if (data.id) {
+                    top.CC.successMsg("保存成功");
+                    location.reload()
+                } else {
+                    top.CC.errorMsg("服务器连接不上");
+                }
+            });
+        }
+    }
+
+
+
+    function initUpload() {
+            var _thisurl ="$!{link.getContextPath()}/sysattach/plupload/upload.json";
+            var _max_file_size = '5mb';
+            var _mime_types = '[{ title : "Image files", extensions : "jpg,gif,png" }]';
+            _mime_types = eval(_mime_types);
+            var uploader = new plupload.Uploader({
+                runtimes: 'html5,flash',
+                browse_button: "tjupload_btn",
+                container: "tjupload",
+                url: _thisurl,
+                multi_selection: true,
+                chunk_size: "1mb",
+                filters: {
+                    max_file_size: _max_file_size,
+                    mime_types: _mime_types
+                },
+                flash_swf_url: '/lib/plupload/Moxie.swf',
+                preinit: {
+                    UploadFile: function(up, file) {
+                        up.setOption('multipart_params', {fileid: file.id})
+                    }
+                },
+                init: {
+                    PostInit:function (up) {
+                    },
+                    FilesAdded: function (up, files) {
+                        plupload.each(files, function (file) {
+                            if (up.state == plupload.STOPPED) {
+                                up.refresh();
+                                up.start();
+                            }
+                        });
+                    },
+                    FileUploaded: function (up, file, info){
+                        if (info ) {
+                            if (info.response) {
+                                var data = JSON.parse(info.response);
+                                console.log(data);
+                                addMxx(file,data.id);
+                            }
+                        } else {
+                        }
+                    },
+                    Error: function (up, err) {
+                        console.log(err);
+                        if (plupload.FILE_SIZE_ERROR == err.code) {
+                            top.CC.warningMsg("选择的文件大小为 " + plupload.formatSize(err.file.size) + " ，超过了最大上传文件大小 " + _max_file_size + " 的限制。");
+                        } else {
+                            top.CC.warningMsg(err.message)
+                        }
+                    }
+                }
+            });
+            uploader.init();
+    }
+
+
+    function picPreviewattachIds(img) {
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 1,
+            area: 'auto',
+            maxWidth: $(window).width() * 0.9,
+            skin: 'layui-layer-nobg', //没有背景色
+            shadeClose: true,
+            content: '<img src="'+img.src+'">'
+        });
+    }
+
+    $('#editForm').validate({
+        rules: {
+            gzmc: {
+                required: true
+            },
+            qylx: {
+                required: true
+            },
+            dpxmc:{
+                required: true
+            }
+        }
+    });
+
+
+</script>
+#end
+
+##                <div class="form-group">
+##                    <label class="col-sm-2 control-label"><span style="color:red"></span>企业名称</label>
+##                    <div class="col-sm-4">
+##                        <input type="text" class="form-control" id="qymc" name="qymc" value="$!{bean.qymc}">
+##                    </div>
+##                    <label class="col-sm-2 control-label"><span style="color:red">*</span>企业类型</label>
+##                    <div class="col-sm-2">
+##                        <select id="qylx" class="form-control" name="qylx">
+##                            <option value="" >--未选择--</option>
+##                            #foreach($option in ${dict.qylx.keySet()})
+##                                #if ($!{option} == $!{bean.qylx})
+##                                    <option value="$option" selected>${dict.qylx.get($option)}</option>
+##                                #else
+##                                    <option value="$option">${dict.qylx.get($option)}</option>
+##                                #end
+##                            #end
+##                        </select>
+##                    </div>
+##                </div>
+##                <div class="hr-line-dashed"></div>
+##                <div class="form-group">
+##                    <label class="col-sm-2 control-label"><span style="color:red">*</span>社会信用代码</label>
+##                    <div class="col-sm-4">
+##                        <input type="text" class="form-control" id="shxydm" name="shxydm" value="$!{bean.shxydm}">
+##                    </div>
+##                </div>
+##                <div class="hr-line-dashed"></div>
+##                <div class="form-group">
+##                    <label class="col-sm-2 control-label"><span style="color:red">*</span>企业法人</label>
+##                    <div class="col-sm-4">
+##                        <input type="text" class="form-control" id="qyfr" name="qyfr" value="$!{bean.qyfr}">
+##                    </div>
+##                    <label class="col-sm-2 control-label"><span style="color:red">*</span>身份证号</label>
+##                    <div class="col-sm-4">
+##                        <input type="text" class="form-control" id="sfzh" name="sfzh" value="$!{bean.sfzh}">
+##                    </div>
+##                </div>
+##                <div class="hr-line-dashed"></div>
+##                <div class="form-group">
+##                    <label class="col-sm-2 control-label"><span style="color:red">*</span>企业负责人</label>
+##                    <div class="col-sm-4">
+##                        <input type="text" class="form-control" id="qyfzr" name="qyfzr" value="$!{bean.qyfzr}">
+##                    </div>
+##                    <label class="col-sm-2 control-label"><span style="color:red">*</span>手机号码</label>
+##                    <div class="col-sm-4">
+##                        <input type="text" class="form-control" id="sjhm" name="sjhm" value="$!{bean.sjhm}">
+##                    </div>
+##                </div>
+##                <div class="hr-line-dashed"></div>
+##                <div class="form-group">
+##                    <label class="col-sm-2 control-label"><span style="color:red">*</span>经营种类</label>
+##                    <div class="col-sm-4">
+##                        <select id="jyzl" class="form-control" name="jyzl" >
+##                            <option value="">--请选择经营种类--</option>
+##                            #foreach($option in ${dict.jyzl.keySet()})
+##                                #if ($!{option} == $!{bean.jyzl})
+##                                    <option value="$option" selected>${dict.jyzl.get($option)}</option>
+##                                #else
+##                                    <option value="$option">${dict.jyzl.get($option)}</option>
+##                                #end
+##                            #end
+##                        </select>
+##                    </div>
+##                    <label class="col-sm-2 control-label"><span style="color:red">*</span>经营模式</label>
+##                    <div class="col-sm-4">
+##                        <select id="jyzl" class="form-control" name="jyms" >
+##                            <option value="">--请选择经营模式--</option>
+##                            #foreach($option in ${dict.jyms.keySet()})
+##                                #if ($!{option} == $!{bean.jyms})
+##                                    <option value="$option" selected>${dict.jyms.get($option)}</option>
+##                                #else
+##                                    <option value="$option">${dict.jyms.get($option)}</option>
+##                                #end
+##                            #end
+##                        </select>
+##                    </div>
+##                </div>
+##                <div class="hr-line-dashed"></div>
+##                <div class="form-group">
+##                    <label class="col-sm-2 control-label">安全承诺</label>
+##                    <div class="col-sm-10">
+##                        <textarea class="form-control editarea" name="aqcn" rows="5" maxlength="1000">$!bean.aqcn</textarea>
+##                    </div>
+##                </div>
+##                <div class="hr-line-dashed"></div>
