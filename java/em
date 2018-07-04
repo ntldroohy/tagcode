@@ -1,0 +1,8 @@
+          @PersistenceContext
+          private EntityManager     em;
+
+
+        Query query = em.createQuery(sqlBuilder.toString());
+        query.setFirstResult((page - 1) * rows);
+        query.setMaxResults(rows);
+        List<SysYh> list = query.getResultList();

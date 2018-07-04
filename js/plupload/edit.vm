@@ -241,7 +241,6 @@
 
 
 
-
     function addMxx(file,imageid) {
         var obj= $(".accordion>.accordion-group").last().clone(true);
         obj.find(".gzmxid").val("");//克隆并移除id
