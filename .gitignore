@@ -1,1 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
+.idea/encodings.xml
+.idea/inspectionProfiles/
+.idea/modules.xml
+.idea/tagcode.iml
+.idea/workspace.xml
